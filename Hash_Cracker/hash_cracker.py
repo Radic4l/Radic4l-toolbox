@@ -1,3 +1,4 @@
+#!usr/bin/env python
 ## Hash_Cracker v0.1 written by Radic4l
 
 import hashlib
@@ -19,3 +20,4 @@ for word in wordlist.readlines():
         break
     else:
         print('No correspondence for this hash : '+wordlist_hash)
+            
