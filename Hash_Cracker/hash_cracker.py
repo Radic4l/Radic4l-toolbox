@@ -1,6 +1,6 @@
 #!usr/bin/env python
 ## Hash_Cracker v0.1 written by Radic4l
-
+import platform
 import hashlib
 from optparse import OptionParser
 import subprocess
@@ -24,16 +24,17 @@ while True:
         wordlist = open(wordlist,'r',encoding='latin-1')
         hash = options.sha256
         break
-    except:
-        print('No file found \n')
+    except all:
+        #print('No file found \n')
         parser.error("try again ...")
+        parser.print_help
 
 hash_count = 0
 wordlist = wordlist.readlines()
 
 for word in wordlist:
     word = word.strip('\n')
-    wordlist_hash=hashlib.sha224(word.encode('latin-1')).hexdigest()
+    wordlist_hash=hashlib.sha256(word.encode('latin-1')).hexdigest()
     if hash == wordlist_hash:
         hash_count = hash_count + 1
         print('Hash FOUND : '+word+' || Hash : '+wordlist_hash)
@@ -41,4 +42,7 @@ for word in wordlist:
     else:
         hash_count = hash_count + 1
         print('Current Hash : '+wordlist_hash+'\nHash tested : ({0}/{1})'.format(hash_count,len(wordlist)))
-        subprocess.call('cls', shell=True)
+        if platform.system()=='Linux': 
+            subprocess.call('clear', shell=True)
+        else:
+            subprocess.call('cls',shell=True) 
