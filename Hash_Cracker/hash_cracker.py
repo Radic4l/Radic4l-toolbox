@@ -4,6 +4,9 @@ import platform
 import hashlib, sys
 from optparse import OptionParser
 import subprocess
+from multiprocessing import Pool
+
+poolSize = 8
 
 parser = OptionParser('''
         [Options]:
@@ -34,13 +37,7 @@ callBash = f"wc -l {wordlist} | cut -d ' ' -f1"
 toto = subprocess.Popen(callBash,stdout=subprocess.PIPE,shell=True)
 wordlistLenght = toto.stdout.read().decode('utf-8').replace("\n","")
 
-with wordlst as fp:
-    line = fp.readline()
-    cnt = 1
-    while line:
-        # print("Line {}: {}".format(cnt, line.strip()))
-        # input('Read next line ...')
-        cnt += 1
+def testLine(line):
         if options.sha256:
             line_hash = hashlib.sha256(line.encode('latin-1')).hexdigest()
             hash = options.sha256
@@ -53,7 +50,6 @@ with wordlst as fp:
         delete = "\b" * (digits)
         input()
         if hash == line_hash:
-            cnt += 1
             print(f'Hash FOUND : {line} || Hash : {line_hash}')
             break
         else:
@@ -61,9 +57,26 @@ with wordlst as fp:
             print(toto, sep=' ', end='', flush=True)
             # print(toto,end='\n',flush=True)
         # sys.stdout.flush()
-        line = fp.readline()  # mettre a la fin de if elif else etc ...
+                # print("Line {}: {}".format(cnt, line.strip()))
+        # input('Read next line ...')
+
         # print(wordlistLenght)
         # input('Continue ...')
+reachedFileEnd = False
+with wordlst as fp:
+        while !reachedFileEnd:
+                lines = []
+                for x in range(0,poolSize - 1):
+                        line = fp.readLine()
+                        if line:
+                                lines.append(fp.readLine())
+                        else:
+                        reachedFileEnd = True
+                
+        with Pool(poolSize) as p:
+        
+                p.map(testLine, lines)
+
 fp.close()
 
 # filepath = 'rockyou.txt'
