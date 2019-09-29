@@ -31,40 +31,45 @@ while True:
 wordlst = open(wordlist, 'r', encoding='latin-1')
 callBash = f"wc -l {wordlist} | cut -d ' ' -f1"
 
-toto = subprocess.Popen(callBash,stdout=subprocess.PIPE,shell=True)
-wordlistLenght = toto.stdout.read().decode('utf-8').replace("\n","")
+file_lenght = subprocess.Popen(callBash,stdout=subprocess.PIPE,shell=True)
+wordlistLenght = file_lenght.stdout.read().decode('latin-1').replace("\n","")
 
 with wordlst as fp:
+    cnt = 0
     line = fp.readline()
-    cnt = 1
+    # print([i for i in line],end='\n')
+
     while line:
-        # print("Line {}: {}".format(cnt, line.strip()))
-        # input('Read next line ...')
         cnt += 1
         if options.sha256:
-            line_hash = hashlib.sha256(line.encode('latin-1')).hexdigest()
-            hash = options.sha256
+            line_hash = hashlib.sha256(line.strip().encode()).hexdigest()
+            passed_hash = options.sha256
         elif options.md5:
-            line_hash = hashlib.md5(line.encode('latin-1')).hexdigest()
-            hash = options.md5
+            line_hash = hashlib.md5(line.strip().encode()).hexdigest()
+            passed_hash = options.md5
+            # print([i for i in line],end='\n')
+        else:
+            print('Choose hash type ...')
 
-        toto = f'Current Hash : {line_hash} \nHash tested : ({cnt}/{wordlistLenght})'
-        digits = len(str(len(toto) - 1))
-        delete = "\b" * (digits)
-        input()
-        if hash == line_hash:
+        toto = f'Current Hash : {line_hash}/{passed_hash} ({cnt}/{wordlistLenght})'
+        # input()
+        if line_hash == passed_hash:
             cnt += 1
-            print(f'Hash FOUND : {line} || Hash : {line_hash}')
+            # print('',end='\n\r')
+            print(f'''
+            \n{'='*int(len(toto)/2-5)}HASH  FOUND{'='*int(len(toto)/2-5)}\n{toto}\nResult Hash  : {line}
+            ''')
             break
         else:
-            # print("{0}{1:{2}}".format(delete, toto, digits))
-            print(toto, sep=' ', end='', flush=True)
-            # print(toto,end='\n',flush=True)
-        # sys.stdout.flush()
-        line = fp.readline()  # mettre a la fin de if elif else etc ...
+            line = fp.readline()
+            # print(f'''{'='*int(len(toto)/2-5)}{'='*int(len(toto)/2-5)}''',toto,sep='',end='\r',file=sys.stdout,flush=True)
+            # print(f'''\r{'='*int(len(toto)/2-5)}Progress..  {'='*int(len(toto)/2-5)}''')
+            print(f'{toto}',end='\r')
+
+
         # print(wordlistLenght)
         # input('Continue ...')
-fp.close()
+# fp.close()
 
 # filepath = 'rockyou.txt'
 
