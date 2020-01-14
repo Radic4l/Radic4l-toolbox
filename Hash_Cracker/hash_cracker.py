@@ -49,10 +49,12 @@ with wordlst as fp:
             line_hash = hashlib.md5(line.strip().encode()).hexdigest()
             passed_hash = options.md5
             # print([i for i in line],end='\n')
+
         elif options.sha1:
             line_hash = hashlib.sha1(line.strip().encode()).hexdigest()
             passed_hash = options.sha1
             # print([i for i in line],end='\n')
+
         else:
             print('Choose hash type ...')
 
@@ -60,10 +62,11 @@ with wordlst as fp:
         # input()
         if line_hash == passed_hash:
             cnt += 1
-            print('',end='\n\r')
-            # print(f'''
-            # \n{'='*int(len(toto)/2-5)}HASH  FOUND{'='*int(len(toto)/2-5)}\n{toto}\nResult Hash  : {line}
-            # ''')
+            # print('',end='\n\r')
+            print(f'''
+            \n{'='*int(len(toto)/2-5)}HASH  FOUND{'='*int(len(toto)/2-5)}\n{toto}\nResult Hash  : {line}
+            ''')
+
             break
         else:
             line = fp.readline()
