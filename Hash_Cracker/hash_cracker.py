@@ -41,12 +41,10 @@ try:
                 passed_hash = options.sha1
             else:
                 print('Choose hash type ...')
-
             searching = f'[!] Trying Hash ... : {line_hash} --- ({cnt}/{wordlistLenght})'
             match_found = f'[+] Hash Matching : {line_hash}/{passed_hash} ({cnt}/{wordlistLenght})'
             if line_hash == passed_hash:
                 cnt += 1
-                # print('',end='\n\r')
                 print(f'''
                 \n{'=' * int(len(match_found) / 2 - 6)} HASH FOUND {'=' * int(len(match_found) / 2 - 5)}\n{match_found}\n[+] Result Hash  : {line}
                 ''')
@@ -55,4 +53,4 @@ try:
                 line = fp.readline()
                 print(f'{searching}', end='\r')
 except:
-    pass
+    exit()
