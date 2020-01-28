@@ -23,33 +23,36 @@ while True:
         parser.print_help()
         break
 
-with wordlst as fp:
-    cnt = 0
-    line = fp.readline()
+try:
+    with wordlst as fp:
+        cnt = 0
+        line = fp.readline()
 
-    while line:
-        cnt += 1
-        if options.sha256:
-            line_hash = hashlib.sha256(line.strip().encode()).hexdigest()
-            passed_hash = options.sha256
-        elif options.md5:
-            line_hash = hashlib.md5(line.strip().encode()).hexdigest()
-            passed_hash = options.md5
-        elif options.sha1:
-            line_hash = hashlib.sha1(line.strip().encode()).hexdigest()
-            passed_hash = options.sha1
-        else:
-            print('Choose hash type ...')
-
-        searching = f'[!] Trying Hash ... : {line_hash} --- ({cnt}/{wordlistLenght})'
-        match_found = f'[+] Hash Matching : {line_hash}/{passed_hash} ({cnt}/{wordlistLenght})'
-        if line_hash == passed_hash:
+        while line:
             cnt += 1
-            # print('',end='\n\r')
-            print(f'''
-            \n{'='*int(len(match_found) / 2 - 6)} HASH FOUND {'=' * int(len(match_found) / 2 - 5)}\n{match_found}\n[+] Result Hash  : {line}
-            ''')
-            break
-        else:
-            line = fp.readline()
-            print(f'{searching}', end='\r')
+            if options.sha256:
+                line_hash = hashlib.sha256(line.strip().encode()).hexdigest()
+                passed_hash = options.sha256
+            elif options.md5:
+                line_hash = hashlib.md5(line.strip().encode()).hexdigest()
+                passed_hash = options.md5
+            elif options.sha1:
+                line_hash = hashlib.sha1(line.strip().encode()).hexdigest()
+                passed_hash = options.sha1
+            else:
+                print('Choose hash type ...')
+
+            searching = f'[!] Trying Hash ... : {line_hash} --- ({cnt}/{wordlistLenght})'
+            match_found = f'[+] Hash Matching : {line_hash}/{passed_hash} ({cnt}/{wordlistLenght})'
+            if line_hash == passed_hash:
+                cnt += 1
+                # print('',end='\n\r')
+                print(f'''
+                \n{'=' * int(len(match_found) / 2 - 6)} HASH FOUND {'=' * int(len(match_found) / 2 - 5)}\n{match_found}\n[+] Result Hash  : {line}
+                ''')
+                break
+            else:
+                line = fp.readline()
+                print(f'{searching}', end='\r')
+except:
+    pass
