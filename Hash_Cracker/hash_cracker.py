@@ -1,5 +1,5 @@
-# #!usr/bin/env python
-# ## Hash_Cracker v0.1 written by Radic4l
+#!/usr/bin/env python
+## Hash_Cracker v0.1 written by Radic4l
 import hashlib
 from optparse import OptionParser
 import subprocess
