@@ -1,19 +1,18 @@
 #!/usr/bin/env python
 ## Hash_Cracker v0.1 written by Radic4l
-import hashlib
-from optparse import OptionParser
-import subprocess
+import hashlib, subprocess, argparse
 
-parser = OptionParser()
-parser.add_option("-w",dest="wordlist",help="Path/to/wordlist.txt")
-parser.add_option("--md5",dest="md5",help="Enter your md5 hash")
-parser.add_option("--sha256",dest="sha256",help="Enter your sha256 hash")
-parser.add_option("--sha1",dest="sha1",help="Enter your sha1 hash")
-(options, args) = parser.parse_args()
+parser = argparse.ArgumentParser(description="Hash Cracker by Radic4l", prog="crack")
+groupe_types =  parser.add_mutually_exclusive_group(required=True)
+parser.add_argument('-w', dest='wordlist', help='Use a wordlist', required=True)
+groupe_types.add_argument('--md5', dest='md5' ,help='MD5 hash type')
+groupe_types.add_argument('--sha256', dest='sha256' ,help='SHA256 hash type')
+groupe_types.add_argument('--sha1', dest='sha1',help='SHA1 hash type')
 
+args = parser.parse_args()
 while True:
     try:
-        wordlist = options.wordlist
+        wordlist = args.wordlist
         wordlst = open(wordlist, 'r', encoding='latin-1')
         callBash = f"wc -l {wordlist} | cut -d ' ' -f1"
         file_lenght = subprocess.Popen(callBash, stdout=subprocess.PIPE, shell=True)
@@ -30,17 +29,16 @@ try:
 
         while line:
             cnt += 1
-            if options.sha256:
+            if args.sha256:
                 line_hash = hashlib.sha256(line.strip().encode()).hexdigest()
-                passed_hash = options.sha256
-            elif options.md5:
+                passed_hash = args.sha256
+            elif args.md5:
                 line_hash = hashlib.md5(line.strip().encode()).hexdigest()
-                passed_hash = options.md5
-            elif options.sha1:
+                passed_hash = args.md5
+            elif args.sha1:
                 line_hash = hashlib.sha1(line.strip().encode()).hexdigest()
-                passed_hash = options.sha1
-            else:
-                print('Choose hash type ...')
+                passed_hash = args.sha1
+
             searching = f'[!] Trying Hash ... : {line_hash} --- ({cnt}/{wordlistLenght})'
             match_found = f'[+] Hash Matching : {line_hash}/{passed_hash} ({cnt}/{wordlistLenght})'
             if line_hash == passed_hash:
